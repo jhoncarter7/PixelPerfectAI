@@ -1,0 +1,3 @@
+[submodule "apps/backend"]
+	path = apps/backend
+	url = https://github.com/jhoncarter7/PixelPerfectAI.git
