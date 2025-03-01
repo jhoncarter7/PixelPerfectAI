@@ -39,20 +39,15 @@ model Models {
   triggerWord    String?
   tensorPath     String?
   trainingStatus    modelTrainingStatusEnum  @default(pending)
-  trainingImages TrainingImages[]
   Images         OutputImages[]
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   falAiRequestId  String?
+  zipUrl         String
   @@index([falAiRequestId])
 }
 
-model TrainingImages {
-  id       String @id @default(uuid())
-  imageUrl String
-  modelId  String
-  model    Models @relation(fields: [modelId], references: [id])
-}
+
 
 
 
