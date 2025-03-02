@@ -21,19 +21,45 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { UploadModel } from "@/components/ui/upload";
 import { useState } from "react";
-
+import {TrainModelInput} from "common/inferred"
+import axios from "axios";
+import { BACKEND_URL } from "../config";
+import {  useRouter } from "next/navigation";
 function Train() {
-  const [zipUrl, setZipUrl] = useState();
-  const [type, setType] = useState();
-  const [eyeColor, setEyeColor] = useState();
-  const [bald, setBald] = useState();
-  const [ethnicity, setEthnicity] = useState();
-  const [age, setAge] = useState();
+  const [zipUrl, setZipUrl] = useState("");
+  const [type, setType] = useState("");
+  const [eyeColor, setEyeColor] = useState("");
+  const [bald, setBald] = useState(false);
+  const [ethnicity, setEthnicity] = useState("");
+  // i dont want to set default value 0 
+  const [age, setAge] = useState<number | undefined>(undefined);
+  const [name, setName] = useState("");
+  const router = useRouter();
+
+
+  async function TrainModel (){
+
+    const input: TrainModelInput = {
+      zipUrl: zipUrl,
+      type: type as "Man" | "Woman" | "Other",
+      eyeColor: eyeColor as "Brown" | "Blue" | "Hazel" | "Gray",
+      bald: bald,
+      ethnicity: ethnicity as "White" | "Black" | "Asian_American" | "East_Asian" | "South_East_Asian" | "South_Asian" | "Middle_Eastern" | "Pacific" | "Hispanic",
+      age: age || 0, // Provide default value to avoid undefined
+      name: name || "", // Provide default value to avoid undefined
+    }
+    const response = await axios.post(`${BACKEND_URL}/ai/training`, input)
+    router.push("/")
+   }
+
+
+
+
 
   return (
     // make this fit on screen
 
-    <div className="flex justify-center items-center py-10">
+    <div className="flex bg-background justify-center items-center py-10">
       <Card className="w-[350px] ">
         <CardHeader>
           <CardTitle>Create project</CardTitle>
@@ -45,11 +71,11 @@ function Train() {
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="name">Name</Label>
-              <Input id="name" placeholder="Name of your project" />
+              <Input id="name" placeholder="Name of your project" value={name} onChange={(e) => setName(e.target.value)} />
             </div>
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Type</Label>
-              <Select>
+              <Label htmlFor="name" >Type</Label>
+              <Select onValueChange={(value) => setType(value)}>
                 <SelectTrigger id="name">
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
@@ -62,7 +88,7 @@ function Train() {
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="name">Ethnicity</Label>
-              <Select>
+              <Select onValueChange={(value) => setEthnicity(value)}>
                 <SelectTrigger id="name">
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
@@ -82,13 +108,13 @@ function Train() {
               </Select>
             </div>
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Age</Label>
-              <Input id="name" type="number" placeholder="Age of the person" />
+              <Label htmlFor="age">Age</Label>
+              <Input id="age" type="number" placeholder="Age of the person" value={age} onChange={(e) => setAge(Number(e.target.value))} />
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="name">Eye Color</Label>
 
-              <Select>
+              <Select onValueChange={(value) => setEyeColor(value)}>
                 <SelectTrigger id="name">
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
@@ -102,16 +128,18 @@ function Train() {
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="name">Bald</Label>
-              <Switch />
+              <Switch checked={bald}  onClick={() => setBald(!bald)}  />
             </div>
            <div>
-           <UploadModel />
+           <UploadModel onUploadDone={(zipUrl: string)=> setZipUrl(zipUrl)}/>
            </div>
           </div>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Button variant="outline">Cancel</Button>
-          <Button>Deploy</Button>
+          <Button variant="outline" onClick={() => router.push("/")} >Cancel</Button>
+          <Button
+          disabled={!zipUrl || !type || !eyeColor || !ethnicity || !age || !name}
+          onClick={TrainModel}>Create Model</Button>
         </CardFooter>
       </Card>
     </div>

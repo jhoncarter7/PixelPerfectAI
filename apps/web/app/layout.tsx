@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
+import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
+import NavBar from "@/components/NavBar";
+
+import { Nunito } from "next/font/google";
+
+const nunito = Nunito({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"], // Light, Regular, Medium, SemiBold, Bold
+  variable: "--font-nunito", // CSS variable for Tailwind
 });
 
 export const metadata: Metadata = {
@@ -22,10 +23,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+    <ClerkProvider>
+    <html lang="en"  className={nunito.variable}>
+      <body >
+      <NavBar/>
         {children}
       </body>
     </html>
+  </ClerkProvider>
   );
 }

@@ -1,15 +1,14 @@
 import {
   Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
   CardContent,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import axios from 'axios'
-import { BACKEND_URL } from "@/app/config";
+import { BACKEND_URL, CLOUDFLARE_KEY } from "@/app/config";
 import JSZip from "jszip";
-export function UploadModel() {
+export function UploadModel({onUploadDone}: {
+  onUploadDone:(zipUrl: string)=> void
+}) {
   return (
     <Card>
       <CardContent className="flex flex-col items-center justify-center  dark:border-zinc-800 rounded-lg p-2 space-y-2">
@@ -39,10 +38,11 @@ export function UploadModel() {
                 const formData = new FormData()
                 formData.append("file", content)
                 formData.append("key", url)
-                console.log("url", url)
+               
                try {
                 const response = await axios.put(url, formData)
                 console.log(response.data)
+                onUploadDone(`${CLOUDFLARE_KEY}/key`)
                } catch (error) {
                 console.log(error)
                }

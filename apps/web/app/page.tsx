@@ -1,17 +1,11 @@
 "use strict";
 
-import { Button } from "@/components/ui/button";
-
-
-
-
+import Landing from "@/components/landing";
 
 export default function Home() {
   return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-
-      <Button>click me</Button>
-    </h1>
+    <>
+      <Landing/>
+    </>
   );
 }

@@ -32,7 +32,7 @@ model Models {
   name           String
   type           ModelTypeEnum
   age            Int
-  ethinicity     ethenicityEnum
+  ethnicity     ethnicityEnum
   eyeColor       eyeColorEnum
   bald           Boolean
   userId         String
@@ -84,7 +84,7 @@ enum ModelTypeEnum {
   Other
 }
 
-enum ethenicityEnum {
+enum ethnicityEnum {
   White
   Black
   Asian_American   @map("Asian American")

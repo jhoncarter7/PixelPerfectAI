@@ -4,7 +4,7 @@ export const TrainModel = z.object({
   name: z.string(),
   type: z.enum(["Man", "Woman", "Other"]),
   age: z.number(),
-  ethinicity: z.enum([
+  ethnicity: z.enum([
     "White",
     "Black",
     "Asian_American",

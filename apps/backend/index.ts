@@ -9,6 +9,8 @@ import { S3Client } from "bun";
 import { FalAIModel } from "./models/FalAiModel";
 import dotenv from "dotenv";
 import cors from 'cors'
+import axios from "axios";
+// import { zip } from "jszip";
 dotenv.config();
 
 const PORT = process.env.PORT || 8080;
@@ -30,15 +32,16 @@ const USER_ID = "1";
 //     endpoint: process.env.ENDPOINT,
 //     bucket: process.env.BUCKET_NAME,
 app.get("/pre-signed-url", async (req, res) => {
+  console.log(process.env.S3_ACCESS_KEY_ID, process.env.S3_SECRET_ACCESS_KEY, process.env.S3_ENDPOINT, process.env.S3_BUCKET)
   
   try {
     const key = `models/${Date.now()}_${Math.random()}.zip`;
     const url = S3Client.presign(key, {
       method: "PUT",
-      accessKeyId: process.env.S3_accessKeyId,
-      secretAccessKey: process.env.S3_secretAccessKey,
-      endpoint: process.env.endpoint,
-      bucket: process.env.S3_bucket,
+      accessKeyId: process.env.S3_ACCESS_KEY_ID,
+      secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+      endpoint: process.env.S3_ENDPOINT,
+      bucket: process.env.S3_BUCKET,
       expiresIn: 60 * 5,
       type: 'application/zip'
     });
@@ -75,7 +78,7 @@ app.post("/ai/training", async (req, res) => {
       name: parsedBody.data.name,
       type: parsedBody.data.type,
       age: parsedBody.data.age,
-      ethinicity: parsedBody.data.ethinicity,
+      ethnicity: parsedBody.data.ethnicity,
       eyeColor: parsedBody.data.eyeColor,
       bald: parsedBody.data.bald,
       userId: USER_ID,

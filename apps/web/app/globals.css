@@ -4,6 +4,17 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: Nunitobold;
+  font-weight: 200 700;
+  src: url("/fonts/NunitoBold.ttf");
+
+}
+
+
+/* do i have to add font variable here */
+
+
 :root {
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -112,6 +123,17 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-primary-button: #4A4A4A;
+  --animate-rotate: rotate 3s linear infinite;
+  --font-nunito: var(--font-nunito);
+  @keyframes rotate {
+    0% { 
+      transform: rotate(0deg) scale(10)
+    };
+    100% {
+       transform: rotate(-360deg) scale(10)
+       };
+  }
 }
 
 @layer base {
